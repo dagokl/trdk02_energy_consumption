@@ -30,7 +30,12 @@ const data = [
 
 const Homepage = () => {
     return (
-        <LineChart width={500} height={300} data={data}>
+        <LineChart width={500 * 2.3} height={300 * 2.3} data={data} margin={{
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 5,
+        }}>
             <XAxis dataKey="name" />
             <YAxis />
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
