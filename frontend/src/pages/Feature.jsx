@@ -1,66 +1,73 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
 
 const data = [
     {
         name: 'Page A',
-        uv: 4000,
-        pv: 2400,
+        Fjernvarme: 4000,
+        Resterende: 2400,
         amt: 2400,
     },
     {
         name: 'Page B',
-        uv: 3000,
-        pv: 1398,
+        Fjernvarme: 3000,
+        Resterende: 1398,
         amt: 2210,
     },
     {
         name: 'Page C',
-        uv: 2000,
-        pv: 9800,
+        Fjernvarme: 2000,
+        Resterende: 9800,
         amt: 2290,
     },
     {
         name: 'Page D',
-        uv: 2780,
-        pv: 3908,
+        Fjernvarme: 2780,
+        Resterende: 3908,
         amt: 2000,
     },
     {
         name: 'Page E',
-        uv: 4000,
-        pv: 2400,
-        amt: 2400,
+        Fjernvarme: 1890,
+        Resterende: 4800,
+        amt: 2181,
     },
     {
         name: 'Page F',
-        uv: 3000,
-        pv: 1398,
-        amt: 2210,
+        Fjernvarme: 2390,
+        Resterende: 13800,
+        amt: 2500,
     },
     {
         name: 'Page G',
-        uv: 2000,
-        pv: 9800,
-        amt: 2290,
-    },
-    {
-        name: 'Page H',
-        uv: 2780,
-        pv: 3908,
-        amt: 2000,
+        Fjernvarme: 3490,
+        Resterende: 4300,
+        amt: 2100,
     },
 ];
 
 const Feature = () => {
     return (
-        <LineChart width={500} height={300} data={data}>
+        <BarChart
+            width={500}
+            height={300}
+            data={data}
+            margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 5,
+            }}
+        >
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-            <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-            <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
-        </LineChart>
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="Fjernvarme" stackId="a" fill="#8884d8" />
+            <Bar dataKey="Resterende" stackId="a" fill="#82ca9d" />
+        </BarChart>
     );
 };
 
