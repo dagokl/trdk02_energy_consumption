@@ -9,8 +9,8 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path='/' component={Homepage} />
-        <Route path='/feature' exact component={Feature} />
+        <Route path='/' element={<Homepage />}></Route>
+        <Route path='/feature' element={<Feature />}></Route>
       </Routes>
     </Router>
   );
