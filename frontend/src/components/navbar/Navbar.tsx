@@ -9,8 +9,6 @@ const Navbar = () => {
   useEffect(() => {
     const fetchdata = async () => {
       const response: IBuildingsData[] = await getBuildings('');
-      console.log('joe');
-      console.log(response);
       setSearch(response);
     };
     fetchdata();
@@ -22,7 +20,7 @@ const Navbar = () => {
         <Bars />
 
         <NavMenu>
-          <SearchBar data={[]} />
+          <SearchBar data={search} />
           <NavLink to='/'>Homepage</NavLink>
           <NavLink to='/feature'>Feature</NavLink>
         </NavMenu>
