@@ -1,0 +1,58 @@
+.container {
+  grid-area: navbar;
+  background-color: var(--navbar-bg);
+}
+.menuitems {
+  margin: 10px;
+  text-align: justify;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: left;
+  background-position-x: 20px;
+  padding: 15px 20px 15px 70px;
+  font-size: 16px;
+  display: block;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+}
+.menuitems:hover {
+  background-color: var(--navbar-hover);
+  color: white;
+}
+.selected {
+  background-color: var(--navbar-hover);
+  background-position-x: 15px;
+  background-size: 40px;
+}
+
+.wrapper {
+  width: 100%;
+  margin: 4% 0% 10% 5%;
+}
+
+.wrapper > div {
+  width: 100%;
+}
+
+input {
+  height: 34px;
+  background: white;
+  border-radius: 5px;
+  width: 82%;
+  border: unset;
+  font-size: 15px;
+  padding-left: 7%;
+}
+
+input:focus {
+  outline: unset;
+}
+
+li {
+  cursor: pointer;
+  list-style: none;
+  text-transform: capitalize;
+  padding: 4px 8px;
+  font-size: 18px;
+}
