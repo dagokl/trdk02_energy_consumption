@@ -22,7 +22,7 @@ const Navbar = () => {
         <Bars />
 
         <NavMenu>
-          <SearchBar data={[]} />
+          <SearchBar data={search} />
           <NavLink to='/'>Homepage</NavLink>
           <NavLink to='/feature'>Feature</NavLink>
         </NavMenu>
