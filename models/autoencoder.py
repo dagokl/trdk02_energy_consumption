@@ -1,20 +1,5 @@
-from resources.utils import load_meters_data
-from sklearn.model_selection import train_test_split
+from resources.utils import prepare_data, load_meters_data
 import keras
-import numpy as np
-
-def prepare_data(meters_data, time_steps, split_ratio=0.2):
-    meters_data.dropna(axis=1, inplace=True)
-
-    X = []
-    for i in range(len(meters_data.values) - time_steps + 1):
-        X.append(meters_data.values[i : (i + time_steps)])
-
-    X = np.stack(X)
-    # min-max normalization
-    X = (X - X.min()) / (X.max() - X.min())
-    # split training and test data
-    return train_test_split(X, test_size=split_ratio)
 
 class Autoencoder(keras.Model):
     """
