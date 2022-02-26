@@ -1,10 +1,8 @@
-import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from time import time
 from datetime import datetime
-
 from sklearn.model_selection import train_test_split
 
 vis_path = 'models/resources/data/VIS Målere.xlsx'
@@ -41,7 +39,7 @@ class et_curve():
         df['et-expected'] = df['temperature'].apply(self.expected)
         return df
 
-def prepare_data(meters_data, time_steps, split_ratio=0.2):
+def prepare_data(meters_data, time_steps, split_ratio=0):
     meters_data.dropna(axis=1, inplace=True)
 
     X = []
@@ -52,7 +50,9 @@ def prepare_data(meters_data, time_steps, split_ratio=0.2):
     # min-max normalization
     X = (X - X.min()) / (X.max() - X.min())
     # split training and test data
-    return train_test_split(X, test_size=split_ratio)
+    if split_ratio:
+        return train_test_split(X, test_size=split_ratio)
+    return X
 
 def linear_interpolation(x, x0, y0, x1, y1):
     slope = (y1 - y0) / (x1 - x0)
@@ -76,7 +76,6 @@ def load_meters_data(esave_path=esave_path):
     """
     Loads all meter data from all sheets in the given excel file.
     """
-    print(sys.path)
     meters_data = pd.read_excel(esave_path, decimal=',', sheet_name=None)
     meters_data_list = meters_data.values()
     for table in meters_data_list:
