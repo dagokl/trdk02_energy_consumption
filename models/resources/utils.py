@@ -86,20 +86,21 @@ def load_meters_data(esave_path=esave_path):
     meters_data = pd.concat(meters_data_list, axis=1, ignore_index=False)
     return meters_data
 
-def load_and_prepare_building_dfs(vis_path=vis_path, esave_path=esave_path):
+def load_and_prepare_building_dfs(raw_esave_table=None, vis_path=vis_path, esave_path=esave_path):
     start_time = time()
     energy_meters_df = pd.read_excel(vis_path)
     # Remove leading and trailing whitespace in cells with value of type string
     energy_meters_df = energy_meters_df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
-    raw_esave_tables_dict = pd.read_excel(esave_path, decimal=',', sheet_name=None)
-    raw_esave_tables_list = raw_esave_tables_dict.values()
-    for table in raw_esave_tables_list:
-        table.rename(columns={table.columns[0]: 'datetime'}, inplace=True)
-        table['datetime'] = pd.to_datetime(table['datetime'], dayfirst=True)
-        table.set_index('datetime', inplace=True)
-        table.sort_index()
-    raw_esave_table = pd.concat(raw_esave_tables_list, axis=1, ignore_index=False)
+    if raw_esave_table is None:
+        raw_esave_tables_dict = pd.read_excel(esave_path, decimal=',', sheet_name=None)
+        raw_esave_tables_list = raw_esave_tables_dict.values()
+        for table in raw_esave_tables_list:
+            table.rename(columns={table.columns[0]: 'datetime'}, inplace=True)
+            table['datetime'] = pd.to_datetime(table['datetime'], dayfirst=True)
+            table.set_index('datetime', inplace=True)
+            table.sort_index()
+        raw_esave_table = pd.concat(raw_esave_tables_list, axis=1, ignore_index=False)
 
     buildings = {}
     current_building = None

@@ -34,13 +34,13 @@ class Autoencoder(keras.Model):
     def create_model(self):
         self.encoder = keras.Sequential([
             keras.layers.Input(shape=(self.X_train.shape[1], self.X_train.shape[2])),
-            keras.layers.Conv1D(filters=64, kernel_size=7, padding="same", strides=2, activation="relu", kernel_regularizer=keras.regularizers.l2(0.0001)),
-            keras.layers.Conv1D(filters=self.latent_dim, kernel_size=7, padding="same", strides=2, activation="relu", kernel_regularizer=keras.regularizers.l2(0.0001))
+            keras.layers.Conv1D(filters=64, kernel_size=5, padding="same", strides=2, activation="relu", kernel_regularizer=keras.regularizers.l2(0.0001)),
+            keras.layers.Conv1D(filters=self.latent_dim, kernel_size=5, padding="same", strides=2, activation="relu", kernel_regularizer=keras.regularizers.l2(0.0001))
         ])
         self.decoder = keras.Sequential([
-            keras.layers.Conv1DTranspose(filters=self.latent_dim, kernel_size=7, padding="same", strides=2, activation="relu", kernel_regularizer=keras.regularizers.l2(0.0001)),
-            keras.layers.Conv1DTranspose(filters=64, kernel_size=7, padding="same", strides=2, activation="relu", kernel_regularizer=keras.regularizers.l2(0.0001)),
-            keras.layers.Conv1DTranspose(filters=self.X_train.shape[2], kernel_size=7, padding="same", activation="relu")
+            keras.layers.Conv1DTranspose(filters=self.latent_dim, kernel_size=5, padding="same", strides=2, activation="relu", kernel_regularizer=keras.regularizers.l2(0.0001)),
+            keras.layers.Conv1DTranspose(filters=64, kernel_size=5, padding="same", strides=2, activation="relu", kernel_regularizer=keras.regularizers.l2(0.0001)),
+            keras.layers.Conv1DTranspose(filters=self.X_train.shape[2], kernel_size=5, padding="same", activation="relu")
         ])
 
     def call(self, x):
@@ -49,7 +49,7 @@ class Autoencoder(keras.Model):
         return decoded
 
 if __name__ == "__main__":
-    time_steps = 12
+    time_steps = 24
     latent_dim = 4
 
     meters_data = load_meters_data()
@@ -60,4 +60,4 @@ if __name__ == "__main__":
     model.compile(optimizer='adam', loss=keras.losses.MeanSquaredError())
     
     model.train()
-    model.save('models/autoencoder1.0')
+    model.save('models/autoencoder'+str(time_steps)+'_'+str(latent_dim))
