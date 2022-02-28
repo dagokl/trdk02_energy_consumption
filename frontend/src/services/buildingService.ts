@@ -10,15 +10,15 @@ import { IBuilding, IBuildings, IBuildingsData } from '../types/interfaces';
 export async function getBuildings(query: string): Promise<IBuildingsData[]> {
   return [
     {
-      id: 'mock',
+      id: 'barnehagen_skole',
       name: 'Barnehagen Skole',
       year: 2010,
       area: 7049,
       categoryIdEsave: 1,
       categoryDescription: 'Skole i barnehagen',
       category: {
-        id: 'mockCat',
-        name: 'Skole',
+        id: 'skole',
+        name: 'skole',
       },
       tek: 'nei',
       energyLabel: 'bad',

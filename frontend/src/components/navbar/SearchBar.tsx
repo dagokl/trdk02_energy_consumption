@@ -53,7 +53,7 @@ function SearchBar(props: { data: IBuildingsData[] }) {
             <li>
               <Link
                 style={{ textDecoration: 'none', color: 'black' }}
-                to={`/${item.category}/${item.label}`}
+                to={`/${item.category}/${item.id}`}
               >
                 {item.label}
               </Link>
