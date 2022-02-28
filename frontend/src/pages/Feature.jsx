@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine } from 'recharts';
 
 
 const data = [
@@ -131,6 +131,7 @@ const data = [
     },
 ];
 
+
 const Feature = () => {
     return (
         <BarChart
@@ -147,7 +148,8 @@ const Feature = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <Tooltip label="Kug" />
+            <ReferenceLine y={11100} stroke="red" />
             <Legend />
             <Bar dataKey="Fjernvarme" stackId="a" fill="#8884d8" />
             <Bar dataKey="Resterende" stackId="a" fill="#82ca9d" />
