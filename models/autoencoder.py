@@ -50,7 +50,7 @@ class Autoencoder(keras.Model):
 
 if __name__ == "__main__":
     time_steps = 24
-    latent_dim = 4
+    latent_dim = 8
 
     meters_data = load_meters_data()
     X_train, X_test = prepare_data(meters_data, time_steps=time_steps, split_ratio=0.2)
