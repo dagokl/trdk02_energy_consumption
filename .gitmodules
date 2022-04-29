@@ -1,0 +1,3 @@
+[submodule "trdk02_energy_consumption_anomalies_pipeline"]
+	path = trdk02_energy_consumption_anomalies_pipeline
+	url = https://github.com/dagokl/trdk02_energy_consumption_anomalies_pipeline.git
