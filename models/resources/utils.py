@@ -1,13 +1,15 @@
+from time import time
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from time import time
-from datetime import datetime
 from sklearn.model_selection import train_test_split
 
 vis_path = 'models/resources/data/VIS Målere.xlsx'
 esave_path = 'models/resources/data/EsaveExport_Trondheim Kommune_Trondheim_10121314.xls'
 et_path = 'models/resources/data/ET Kurver.xlsx'
+voll_path = 'models/resources/data/Volltemp.xlsx'
+validation_data = 'models/resources/data/validationdata.xlsx'
 sensor_types = ['Fastkraft', 'Fjernvarme', 'Varme', 'Elkjel', 'Kjøling']
 
 class et_curve():
@@ -18,7 +20,6 @@ class et_curve():
 
     def expected(self, temperature):
         if temperature < self.dx[0]:
-            # TODO improve this prediction
             return linear_interpolation(temperature, self.dx[0], self.dy[0], self.dx[1], self.dy[1])
         if temperature > self.dx[-1]:
             return self.dy[-1]
@@ -39,14 +40,26 @@ class et_curve():
         df['et-expected'] = df['temperature'].apply(self.expected)
         return df
 
-def prepare_data(meters_data, time_steps, split_ratio=0):
+def get_voll_temps(voll_path=voll_path):
+    # temperatures from voll
+    temp_voll = pd.read_excel(voll_path, decimal=',')
+    temp_voll.rename(columns={temp_voll.columns[0]: 'datetime'}, inplace=True)
+    temp_voll['datetime'] = pd.to_datetime(temp_voll['datetime'], dayfirst=True)
+    temp_voll.set_index('datetime', inplace=True)
+    temp_voll.sort_index()
+    return temp_voll
+
+def prepare_data(meters_data, time_steps=None, split_ratio=0):
     meters_data.dropna(axis=1, inplace=True)
 
-    X = []
-    for i in range(len(meters_data.values) - time_steps + 1):
-        X.append(meters_data.values[i : (i + time_steps)])
+    if time_steps is not None:
+        X = []
+        for i in range(len(meters_data.values) - time_steps + 1):
+            X.append(meters_data.values[i : (i + time_steps)])
 
-    X = np.stack(X)
+        X = np.stack(X)
+    else:
+        X = meters_data.values
     # min-max normalization
     X = (X - X.min()) / (X.max() - X.min())
     # split training and test data
@@ -140,7 +153,7 @@ def load_and_prepare_building_dfs(raw_esave_table=None, vis_path=vis_path, esave
     for building_df in building_dfs.values():
         building_df['Totalt'] = building_df[list(building_df.columns)].sum(axis=1)
 
-    print('Data loaded in {} seconds'.format(time() - start_time))
+    print(f'Data loaded in {round(time() - start_time, 2)} seconds')
     return building_dfs
 
 def load_and_prepare_et_curve_dfs(et_path=et_path):
@@ -165,11 +178,11 @@ def load_and_prepare_et_curve_dfs(et_path=et_path):
 
     return et_curve_dfs
 
-"""
-Normalizes buildings by either min-max scaling or standard-score.
-https://en.wikipedia.org/wiki/Normalization_(statistics)
-"""
 def normalize_building_dfs(building_dfs, method='min-max'):
+    """
+    Normalizes buildings by either min-max scaling or standard-score.
+    https://en.wikipedia.org/wiki/Normalization_(statistics)
+    """
     for building_name, building_df in building_dfs.items():
         if method == 'min-max':
             building_df = (building_df - building_df.min()) / (building_df.max() - building_df.min())
@@ -179,6 +192,30 @@ def normalize_building_dfs(building_dfs, method='min-max'):
             raise ValueError('Unknown normalization method')
         building_dfs[building_name] = building_df
     return building_dfs
+
+def get_validation_data(validation_data=validation_data):
+    pandas_df = pd.read_excel(validation_data, decimal=',')
+
+    anomalies_gt = []
+    # iterate through each row
+    for _, row in pandas_df.iterrows():
+        building_name = row[0]
+        for date in row[1:]:
+            # check if date is not NaN
+            if not pd.isnull(date):
+                year, week = date.split(',')
+                anomalies_gt.append((building_name, int(year), int(week)))
+
+    return anomalies_gt
+
+def get_building_type(name):
+    # returns the type of building based on the name. current types are:
+    types = ['barneskole', 'ungdomsskole', 'hall', 'senter', 'barnehage', 'sykehjem']
+    for t in types:
+        if t in name:
+            return t
+    return None
+
 
 if __name__ == "__main__":
     # load meters data
